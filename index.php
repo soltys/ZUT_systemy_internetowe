@@ -1,6 +1,6 @@
 <?php
-
-require_once 'Controller.php';
+require_once 'config.php';
+require_once ABSPATH . 'common/Controller.php';
 if (!empty($_GET)) {
     if(isset($_GET["view"]))
     {

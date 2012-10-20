@@ -3,10 +3,17 @@ require_once dirname(dirname(__FILE__)) . '/config.php';
 require_once ABSPATH . 'DAL/Database.php';
 require_once ABSPATH . 'model/Person.php';
 require_once ABSPATH . 'common/Paginator.php';
+require_once ABSPATH . 'klogger/klogger.php';
 
+$log = KLogger::instance(ABSPATH . 'logs/search', KLOGGER_ERROR_LEVEL);
+if (isset($_POST['query'])) {
+    $query = $_POST['query'];
+} else {
+    $log->logError("Query in search was not specifiled!");
+}
 
 $db = new Database();
-$people = $db->getPeople();
+$people = $db->searchPeople('lastName', $query);
 $paginator = new Paginator($people);
 $page = Paginator::getPage();
 $pagePeople = $paginator->paginate($page);
@@ -25,9 +32,9 @@ $pagePeople = $paginator->paginate($page);
         <th>Email</th>
         <th>Kod</th>
     </tr>
-    <?php
-    foreach ($pagePeople as $person) {
-        ?>
+<?php
+foreach ($pagePeople as $person) {
+    ?>
         <tr>
             <td><?php print $person->getPersonId(); ?></td>
             <td><?php print $person->getFirstName(); ?></td>
@@ -37,13 +44,13 @@ $pagePeople = $paginator->paginate($page);
             <td><?php print $person->getEmail(); ?></td>
             <td><?php print $person->getPostalCode(); ?></td>
         </tr>
-        <?php
-    }
-    ?>
+    <?php
+}
+?>
 </table>
 
 <p>
-    <?php
-    $paginator->paginationNavigation($page);
-    ?>
+<?php
+$paginator->paginationNavigation($page);
+?>
 </p>

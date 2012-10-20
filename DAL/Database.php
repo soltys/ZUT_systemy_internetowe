@@ -37,6 +37,19 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
         }
     }
 
+    private function createPerson($row) {
+        $personId = $row["personId"];
+        $firstName = $row["firstName"];
+        $lastName = $row["lastName"];
+        $gender = $row["gender"];
+        $maidenName = $row["maidenName"];
+        $email = $row["email"];
+        $postalCode = $row["postalCode"];
+
+        $person = new Person($firstName, $lastName, $gender, $maidenName, $email, $postalCode, $personId);
+        return $person;
+    }
+
     public function getPeople() {
         $result = mysqli_query($this->mysqli, "SELECT * FROM " . PERSON_TABLE);
         if (!$result) {
@@ -46,16 +59,23 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
         }
         $peopleList = array();
         while ($row = mysqli_fetch_assoc($result)) {
+            $person = $this->createPerson($row);
+            array_push($peopleList, $person);
+        }
+        mysqli_free_result($result);
+        return $peopleList;
+    }
 
-            $personId = $row["personId"];
-            $firstName = $row["firstName"];
-            $lastName = $row["lastName"];
-            $gender = $row["gender"];
-            $maidenName = $row["maidenName"];
-            $email = $row["email"];
-            $postalCode = $row["postalCode"];
-
-            $person = new Person($firstName, $lastName, $gender, $maidenName, $email, $postalCode, $personId);
+    public function searchPeople($field, $query) {
+        $result = mysqli_query($this->mysqli, "SELECT * FROM " . PERSON_TABLE . " WHERE `$field` LIKE '%$query%'");
+        if (!$result) {
+            $this->log->logAlert("Query failed select people from database, where $field is like $query");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+            return array();
+        }
+        $peopleList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $person = $this->createPerson($row);
             array_push($peopleList, $person);
         }
         mysqli_free_result($result);

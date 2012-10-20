@@ -18,7 +18,7 @@ function getPostData($name) {
         }
         return $_POST[$name];
     } else {
-        $log->logNotice("$name is not set empty");
+        $log->logNotice("$name is not set");
         $errorCount++;
         return NULL;
     }
