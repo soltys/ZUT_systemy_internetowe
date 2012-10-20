@@ -2,6 +2,7 @@
 
 require_once dirname(dirname(__FILE__)) . '/config.php';
 require_once ABSPATH . 'DAL/SessionManager.php';
+require_once ABSPATH . 'DAL/Database.php';
 require_once ABSPATH . 'model/Person.php';
 require_once ABSPATH . 'klogger/klogger.php';
 $errorCount = 0;
@@ -54,6 +55,8 @@ if ($errorCount == 0) {
     $person = new Person($firstName, $lastName, $gender, $maidenName, $email, $postalCode);
     $sessionManager = SessionManager::getInstance();
     $sessionManager->addPerson($person);
+    $database = new Database();
+    $database->addPerson($person);
 } else {
     ?>
     <p>Liczba błędów w formularzu:  <?php print $errorCount ?></p>

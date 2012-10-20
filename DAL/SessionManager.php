@@ -17,7 +17,7 @@ class SessionManager {
 
     private function __construct() {
 
-        $log = KLogger::instance(ABSPATH . "logs/SessionManager", KLOGGER_ERROR_LEVEL);
+        $this->log = KLogger::instance(ABSPATH . "logs/SessionManager", KLOGGER_ERROR_LEVEL);
         $hr = session_start();
         if (!$hr) {
             $log->logFatal("Unable to start a seesion");
@@ -34,7 +34,7 @@ class SessionManager {
     }
 
     public function addPerson($person) {
-        $peopleList = getSessionData("people");
+        $peopleList = $this->getSessionData("people");
         array_push($peopleList, $person);
         $_SESSION['people'] = $peopleList;
         $this->log->logInfo("added new entry to session");

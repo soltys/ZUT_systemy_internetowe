@@ -15,5 +15,32 @@ class Database{
             $this->log->logFatal("Failed to connect to MySQL: " . mysqli_connect_error());
         }
     }
+
+    public function getPersonTable()
+    {
+        $peopleList = array();
+    }
+
+    public function addPerson($person)
+    {
+        $firstName = $person->getFirstName();
+        $lastName = $person->getLastName();
+        $gender = $person->getGender();
+        $maidenName = $person->getMaidenName();
+        $email = $person->getEmail();
+        $postalCode = $person->getPostalCode();
+        $result = mysqli_query($this->mysqli,"INSERT INTO ". PERSON_TABLE ." (firstName, lastName, gender, maidenName, email, postalCode)
+VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalCode')");
+        if(!$result)
+        {
+            $this->log->logAlert("Query failed to add new person to database");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+
+    }
+
+    public function __destruct() {
+        mysqli_close($this->mysqli);
+    }
 }
 ?>
