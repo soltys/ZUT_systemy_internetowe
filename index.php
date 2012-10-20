@@ -2,7 +2,10 @@
 
 require 'Controller.php';
 if (!empty($_GET)) {
-    $viewName = $_GET["view"];
+    if(isset($_GET["view"]))
+    {
+        $viewName = $_GET["view"];
+    }
 }
 if (!isset($viewName)) {
     $viewName = "index";

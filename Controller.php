@@ -9,12 +9,12 @@ class Controller {
     private $log;
 
     public function __construct() {
-        $this->log = KLogger::instance(dirname(__FILE__) . '/logs', KLogger::DEBUG);
+        $this->log = KLogger::instance(dirname(__FILE__) . '/logs/Controller', KLogger::DEBUG);
     }
 
     private function loadSegment($viewName, $segmentName) {
         $segmentFileName = "views/" . $viewName . "/" . $segmentName . ".tpl.php";
-        $this->log->logInfo("loading" . $segmentName . " from", $segmentFileName);
+        $this->log->logInfo("loading " . $segmentName . " from", $segmentFileName);
         $segmentTemplate = new TemplateEngine($segmentFileName);
 
         $this->page->set($segmentName, $segmentTemplate->parse());
@@ -27,7 +27,7 @@ class Controller {
     public function getView($viewName) {
         if (! $this->isViewExists($viewName)) {
             $this->log->logError("View '". $viewName . "' do not exists");
-            $viewName = "notfound";
+            $viewName = "notFound";
         }
         $this->page = new TemplateEngine("views/shared.tpl.php");
         $this->log->logInfo("loading shared template");

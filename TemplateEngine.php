@@ -19,7 +19,7 @@ class TemplateEngine {
     public function load($template) {
 
         if (!is_file($template)) {
-            $log = KLogger::instance(dirname(__FILE__) . '/logs', KLogger::DEBUG);
+            $log = KLogger::instance(dirname(__FILE__) . '/logs/TemplateEngine', KLogger::DEBUG);
             $log->logNotice("File not found: $template");
         } elseif (!is_readable($template)) {
             throw new IOException("Could not access file: $template");
@@ -37,7 +37,6 @@ class TemplateEngine {
         $content = ob_get_clean();
         return $content;
     }
-
 }
 
 ?>

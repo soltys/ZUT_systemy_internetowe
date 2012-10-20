@@ -1,5 +1,5 @@
 
-<form method="post" action="addUser.php">
+<form method="post" action="index.php?view=addPerson">
 
     <label >Imię</label>
     <input   type="text" name="firstName"/>
@@ -10,8 +10,8 @@
     <br/>
 
     <p>Płeć</p>
-    <input  type="radio" name="sex" value="women"/> <label>Kobieta</label><br/>
-    <input   type="radio" name="sex" value="men"/>         <label>Mężczyzna</label><br/>
+    <input  type="radio" name="gender" value="women"/> <label>Kobieta</label><br/>
+    <input   type="radio" name="gender" value="men"/>         <label>Mężczyzna</label><br/>
     <br/>
     <label>Nazwisko panieńskie</label>
     <input  type="text" name="maidenName"/>

@@ -21,8 +21,7 @@
                             <ul class="nav">
                                 <li><a href="index.php" title="return to front page">Strona główna</a></li>
                                 <li><a href="index.php?view=form" title="learn more about us">Formularz</a></li>
-                                <li><a href="portfolio.html" title="see some samples of our work">Portfolio</a></li>
-                                <li><a href="contact.html" title="contact us">Contact</a></li>
+                                <li><a href="index.php?view=currentSession" title="see some samples of our work">Podgląd sesji</a></li>
                             </ul>
                         </div>
                     </div>
