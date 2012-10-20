@@ -55,7 +55,7 @@ require_once ABSPATH . 'DAL/SessionManager.php';
             $peopleCount = $sessionManager->getPeopleCount();
             if($peopleCount > 0)
             {
-                print "<p>Liczba dodanych pracowników $peopleCount</p>";
+                print "<p>Liczba dodanych pracowników $peopleCount w tej sesji</p>";
             }
             ?>
 

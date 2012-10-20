@@ -19,7 +19,7 @@ $page = Paginator::getPage();
 $pagePeople = $paginator->paginate($page);
 ?>
 
-<h2>Baza danych</h2>
+<h2>Szukajka</h2>
 
 
 <table  border="1">

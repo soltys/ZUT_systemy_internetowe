@@ -16,6 +16,25 @@ class Database {
         if (mysqli_connect_errno($this->mysqli)) {
             $this->log->logFatal("Failed to connect to MySQL: " . mysqli_connect_error());
         }
+
+        $this->createTables();
+    }
+
+    private function createTables() {
+    $result =  mysqli_query($this->mysqli, "CREATE TABLE IF NOT EXISTS `".PERSON_TABLE."` (
+  `personId` int(11) NOT NULL AUTO_INCREMENT,
+  `firstName` varchar(256) NOT NULL,
+  `lastName` varchar(256) NOT NULL,
+  `gender` varchar(256) NOT NULL,
+  `maidenName` varchar(256) NOT NULL,
+  `email` varchar(256) NOT NULL,
+  `postalCode` varchar(256) NOT NULL,
+  PRIMARY KEY (`personId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;");
+     if (!$result) {
+            $this->log->logAlert("Query failed to create a table `". PERSON_TABLE."` to database");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
     }
 
     public function getPersonTable() {
@@ -32,7 +51,7 @@ class Database {
         $result = mysqli_query($this->mysqli, "INSERT INTO " . PERSON_TABLE . " (firstName, lastName, gender, maidenName, email, postalCode)
 VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalCode')");
         if (!$result) {
-            $this->log->logAlert("Query failed to add new person to database");
+            $this->log->logAlert("Query failed to add person to database");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
     }
