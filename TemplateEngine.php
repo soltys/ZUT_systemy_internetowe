@@ -1,6 +1,6 @@
 <?php
-
-require_once 'klogger/klogger.php';
+require_once 'config.php';
+require_once ABSPATH . 'klogger/klogger.php';
 
 class TemplateEngine {
 
@@ -19,7 +19,7 @@ class TemplateEngine {
     public function load($template) {
 
         if (!is_file($template)) {
-            $log = KLogger::instance(dirname(__FILE__) . '/logs/TemplateEngine', KLogger::DEBUG);
+            $log = KLogger::instance(ABSPATH . '/logs/TemplateEngine', KLOGGER_ERROR_LEVEL);
             $log->logNotice("File not found: $template");
         } elseif (!is_readable($template)) {
             throw new IOException("Could not access file: $template");

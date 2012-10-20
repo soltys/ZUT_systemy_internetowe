@@ -1,7 +1,7 @@
 <?php
-
-require_once 'TemplateEngine.php';
-require_once 'klogger/klogger.php';
+require_once 'config.php';
+require_once ABSPATH . 'TemplateEngine.php';
+require_once ABSPATH . 'klogger/klogger.php';
 
 class Controller {
 
@@ -9,7 +9,7 @@ class Controller {
     private $log;
 
     public function __construct() {
-        $this->log = KLogger::instance(dirname(__FILE__) . '/logs/Controller', KLogger::DEBUG);
+        $this->log = KLogger::instance(ABSPATH . '/logs/Controller', KLOGGER_ERROR_LEVEL);
     }
 
     private function loadSegment($viewName, $segmentName) {

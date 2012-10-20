@@ -1,3 +1,7 @@
+<?php
+require_once 'config.php';
+require_once ABSPATH . 'DAL/SessionManager.php';
+?>
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -36,15 +40,25 @@
                                 <li><a href="http://google.com">google</a></li>
                                 <li><a href="http://onet.pl">Onet</a></li>
                             </ul>
-    <?php
-}
-?>
+                            <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
         <div id="footer">
-            <p>Stopka</p>
+            <p>Paweł 'sołtys' Sołtysiak I1-32</p>
+<?php
+            $sessionManager = SessionManager::getInstance();
+            $peopleCount = $sessionManager->getPeopleCount();
+            if($peopleCount > 0)
+            {
+                print "<p>Liczba dodanych pracowników $peopleCount</p>";
+            }
+            ?>
+
+
         </div>
 
     </body>

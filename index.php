@@ -1,6 +1,6 @@
 <?php
 
-require 'Controller.php';
+require_once 'Controller.php';
 if (!empty($_GET)) {
     if(isset($_GET["view"]))
     {

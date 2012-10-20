@@ -1,11 +1,13 @@
 <?php
-require_once dirname(__FILE__) . '/../../DAL/SessionManager.php';
-require_once dirname(__FILE__) . '/../../model/Person.php';
-require_once dirname(__FILE__) . '/../../klogger/klogger.php';
+
+require_once dirname(dirname(__FILE__)) . '/config.php';
+require_once ABSPATH . 'DAL/SessionManager.php';
+require_once ABSPATH . 'model/Person.php';
+require_once ABSPATH . 'klogger/klogger.php';
 $errorCount = 0;
 
 function getPostData($name) {
-    $log = KLogger::instance(dirname(__FILE__) . '/../../logs/addPerson');
+    $log = KLogger::instance(ABSPATH . 'logs/addPerson',KLOGGER_ERROR_LEVEL);
     global $errorCount;
     if (isset($_POST[$name])) {
         if (empty($_POST[$name])) {
@@ -22,7 +24,7 @@ function getPostData($name) {
 }
 
 global $errorCount;
-$log = KLogger::instance(dirname(__FILE__) . '/../../logs/addPerson');
+$log = KLogger::instance(ABSPATH . 'logs/addPerson',KLOGGER_ERROR_LEVEL);
 $firstName = getPostData("firstName");
 $lastName = getPostData("lastName");
 $gender = getPostData("gender");
