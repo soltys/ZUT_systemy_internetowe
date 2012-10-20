@@ -5,4 +5,4 @@
  * and open the template in the editor.
  */
 ?>
-<h1>foobar</h1>
+<a href="index.php?view=destroySession">Wyczyść sesję!</a>

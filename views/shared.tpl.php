@@ -23,9 +23,10 @@ require_once ABSPATH . 'DAL/SessionManager.php';
                     <div class="col2">
                         <div >
                             <ul class="nav">
-                                <li><a href="index.php" title="return to front page">Strona główna</a></li>
-                                <li><a href="index.php?view=form" title="learn more about us">Formularz</a></li>
-                                <li><a href="index.php?view=currentSession" title="see some samples of our work">Podgląd sesji</a></li>
+                                <li><a href="index.php">Strona główna</a></li>
+                                <li><a href="index.php?view=form" >Formularz</a></li>
+                                <li><a href="index.php?view=currentSession" >Podgląd sesji</a></li>
+                                <li><a href="index.php?view=database">Baza danych</a></li>
                             </ul>
                         </div>
                     </div>

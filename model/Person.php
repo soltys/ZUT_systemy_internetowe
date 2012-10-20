@@ -10,13 +10,14 @@ class Person{
     private $email;
     private $postalCode;
 
-    function __construct( $firstName, $lastName, $gender, $maidenName, $email, $postalCode) {
+    function __construct( $firstName, $lastName, $gender, $maidenName, $email, $postalCode,$personId = 0) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->gender = $gender;
         $this->maidenName = $maidenName;
         $this->email = $email;
         $this->postalCode = $postalCode;
+        $this->personId = $personId;
     }
 
     public function getPersonId() {
