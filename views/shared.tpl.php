@@ -27,6 +27,8 @@ require_once ABSPATH . 'DAL/SessionManager.php';
                                 <li><a href="index.php?view=form" >Formularz</a></li>
                                 <li><a href="index.php?view=currentSession" >Podgląd sesji</a></li>
                                 <li><a href="index.php?view=database">Baza danych</a></li>
+                                <li><a href="index.php?view=editPerson">Edytuj dane pracownika</a></li>
+                                <li><a href="index.php?view=deletePerson">Usuń pracownika</a></li>
                             </ul>
                         </div>
                     </div>

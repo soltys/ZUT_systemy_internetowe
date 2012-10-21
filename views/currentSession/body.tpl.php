@@ -7,7 +7,8 @@ $sessionManager = SessionManager::getInstance();
 $people = $sessionManager->getPeople();
 ?>
 
-<p>Session</p>
+<h2>Podgląd sesji</h2>
+<h2>Podgląd sesji</h2543
 
 <?php
 

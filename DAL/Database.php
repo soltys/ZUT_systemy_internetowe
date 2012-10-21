@@ -21,7 +21,7 @@ class Database {
     }
 
     private function createTables() {
-    $result =  mysqli_query($this->mysqli, "CREATE TABLE IF NOT EXISTS `".PERSON_TABLE."` (
+        $result = mysqli_query($this->mysqli, "CREATE TABLE IF NOT EXISTS `" . PERSON_TABLE . "` (
   `personId` int(11) NOT NULL AUTO_INCREMENT,
   `firstName` varchar(256) NOT NULL,
   `lastName` varchar(256) NOT NULL,
@@ -31,8 +31,8 @@ class Database {
   `postalCode` varchar(256) NOT NULL,
   PRIMARY KEY (`personId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;");
-     if (!$result) {
-            $this->log->logAlert("Query failed to create a table `". PERSON_TABLE."` to database");
+        if (!$result) {
+            $this->log->logAlert("Query failed to create a table `" . PERSON_TABLE . "` to database");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
     }
@@ -99,6 +99,14 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
         }
         mysqli_free_result($result);
         return $peopleList;
+    }
+
+    public function deletePerson($personId) {
+        $result = mysqli_query($this->mysqli, "DELETE FROM " . PERSON_TABLE . " WHERE `personId`=$personId");
+        if (!$result) {
+            $this->log->logAlert("Query failed delete person from database, where personId is $personId");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
     }
 
     public function __destruct() {
