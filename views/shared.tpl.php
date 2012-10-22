@@ -8,29 +8,38 @@ require_once ABSPATH . 'DAL/SessionManager.php';
         <title>Paweł Sołtys Sołtysiak</title>
 
         <link rel="stylesheet" type="text/css" href="styles.css" />
+        <!--[if lt IE 7]>
+<style media="screen" type="text/css">
+.col1 {
+        width:100%;
+    }
+</style>
+<![endif]-->
     </head>
     <body>
 
         <div id="header">
             <h1>Header</h1>
         </div>
-        <div class="colmask threecol">
+        <div class="colmask holygrail">
             <div class="colmid">
                 <div class="colleft">
-                    <div class="col1">
-                        <?php print $this->body; ?>
+                    <div class="col1wrap">
+                        <div class="col1">
+                            <?php print $this->body; ?>
+                        </div>
                     </div>
                     <div class="col2">
-                        <div >
-                            <ul class="nav">
-                                <li><a href="index.php">Strona główna</a></li>
-                                <li><a href="index.php?view=form" >Formularz</a></li>
-                                <li><a href="index.php?view=currentSession" >Podgląd sesji</a></li>
-                                <li><a href="index.php?view=database">Baza danych</a></li>
-                                <li><a href="index.php?view=editPerson">Edytuj dane pracownika</a></li>
-                                <li><a href="index.php?view=deletePerson">Usuń pracownika</a></li>
-                            </ul>
-                        </div>
+
+                        <ul class="nav">
+                            <li><a href="index.php">Strona główna</a></li>
+                            <li><a href="index.php?view=form" >Formularz</a></li>
+                            <li><a href="index.php?view=currentSession" >Podgląd sesji</a></li>
+                            <li><a href="index.php?view=database">Baza danych</a></li>
+                            <li><a href="index.php?view=editPerson">Edytuj dane pracownika</a></li>
+                            <li><a href="index.php?view=deletePerson">Usuń pracownika</a></li>
+                        </ul>
+
                     </div>
                     <div class="col3">
                         <?php
@@ -52,16 +61,13 @@ require_once ABSPATH . 'DAL/SessionManager.php';
         </div>
         <div id="footer">
             <p>Paweł 'sołtys' Sołtysiak I1-32</p>
-<?php
+            <?php
             $sessionManager = SessionManager::getInstance();
             $peopleCount = $sessionManager->getPeopleCount();
-            if($peopleCount > 0)
-            {
+            if ($peopleCount > 0) {
                 print "<p>Liczba dodanych pracowników $peopleCount w tej sesji</p>";
             }
             ?>
-
-
         </div>
 
     </body>
