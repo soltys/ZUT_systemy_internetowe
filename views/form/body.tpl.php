@@ -1,26 +1,41 @@
 
 <form method="post" action="index.php?view=addPerson">
 
-    <label >Imię</label>
-    <input   type="text" name="firstName"/>
-    <br/>
+    <table border="0">
+        <tbody>
+            <tr>
+                <td><label >Imię</label></td>
+                <td><input   type="text" name="firstName"/></td>
+            </tr>
+            <tr>
+                <td>    <label >Nazwisko</label></td>
+                <td>    <input  type="text" name="lastName"/></td>
+            </tr>
+            <tr>
+                <td>Płeć</td>
+                <td><input  type="radio" name="gender" value="women"/> <label>Kobieta</label></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input   type="radio" name="gender" value="men"/>         <label>Mężczyzna</label></td>
+            </tr>
+            <tr>
+                <td> <label>Nazwisko panieńskie</label></td>
+                <td>    <input  type="text" name="maidenName"/></td>
+            </tr>
+            <tr>
+                <td>    <label>Email</label></td>
+                <td>    <input  type="text" name="email"/></td>
+            </tr>
+            <tr>
+                <td>    <label>Kod pocztowy</label></td>
+                <td>    <input  type="text" name="postalCode"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>    <input type="submit"/></td>
+            </tr>
+        </tbody>
+    </table>
 
-    <label >Nazwisko</label>
-    <input  type="text" name="lastName"/>
-    <br/>
-
-    <p>Płeć</p>
-    <input  type="radio" name="gender" value="women"/> <label>Kobieta</label><br/>
-    <input   type="radio" name="gender" value="men"/>         <label>Mężczyzna</label><br/>
-    <br/>
-    <label>Nazwisko panieńskie</label>
-    <input  type="text" name="maidenName"/>
-    <br/>
-    <label>Email</label>
-    <input  type="text" name="email"/>
-    <br/>
-    <label>Kod pocztowy</label>
-    <input  type="text" name="postalCode"/>
-    <br/>
-    <input type="submit"/>
 </form>

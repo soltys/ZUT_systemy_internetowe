@@ -103,7 +103,7 @@ img {
 }
 /* holy grail 3 column settings */
 .holygrail {
-    background:#ff9;    	/* Right column background colour */
+    background:#eee;    	/* Right column background colour */
 }
 .holygrail .colmid {
     float:left;
@@ -119,7 +119,7 @@ img {
     margin-left:-50%;
     position:relative;
     left:400px;         	/* Left column width + right column width */
-    background:#FFD8B7;    	/* Left column background colour */
+    background:#eee;    	/* Left column background colour */
 }
 .holygrail .col1wrap {
     float:left;
