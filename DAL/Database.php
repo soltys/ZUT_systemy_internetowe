@@ -5,6 +5,7 @@ require_once ABSPATH . "klogger/klogger.php";
 require_once ABSPATH . "model/Person.php";
 define('TABLE_PREFIX', "si_");
 define('PERSON_TABLE', TABLE_PREFIX . 'person');
+define('USER_TABLE', TABLE_PREFIX . 'user');
 
 class Database {
 
@@ -22,18 +23,35 @@ class Database {
     }
 
     private function createTables() {
-        $result = mysqli_query($this->mysqli, "CREATE TABLE IF NOT EXISTS `" . PERSON_TABLE . "` (
-  `personId` int(11) NOT NULL AUTO_INCREMENT,
-  `firstName` varchar(256) NOT NULL,
-  `lastName` varchar(256) NOT NULL,
-  `gender` varchar(256) NOT NULL,
-  `maidenName` varchar(256) NOT NULL,
-  `email` varchar(256) NOT NULL,
-  `postalCode` varchar(256) NOT NULL,
-  PRIMARY KEY (`personId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;");
-        if (!$result) {
+        $query = "CREATE TABLE IF NOT EXISTS `" . PERSON_TABLE . "` (
+                `personId` int(11) NOT NULL AUTO_INCREMENT,
+                `firstName` varchar(256) NOT NULL,
+                `lastName` varchar(256) NOT NULL,
+                `gender` varchar(256) NOT NULL,
+                `maidenName` varchar(256) NOT NULL,
+                `email` varchar(256) NOT NULL,
+                `postalCode` varchar(256) NOT NULL,
+                PRIMARY KEY (`personId`)
+              ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;";
+        $personTableResult = mysqli_query($this->mysqli, $query);
+        if (!$personTableResult) {
             $this->log->logAlert("Query failed to create a table `" . PERSON_TABLE . "` to database");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+
+        $query = "CREATE TABLE IF NOT EXISTS `" . USER_TABLE . "` (
+                `userId` int(11) NOT NULL AUTO_INCREMENT,
+                `login` varchar(255) NOT NULL,
+                `password` varchar(255) NOT NULL,
+                `rights` int(11) NOT NULL,
+                `firstName` varchar(255) NOT NULL,
+                `lastName` varchar(255) NOT NULL,
+                PRIMARY KEY (`userId`),
+                UNIQUE KEY `login` (`login`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ";
+        $userTableResult = mysqli_query($this->mysqli, $query);
+        if (!$userTableResult) {
+            $this->log->logAlert("Query failed to create a table `" . USER_TABLE . "` to database");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
     }
