@@ -1,6 +1,6 @@
 <?php
 
-class Person{
+class Person {
 
     private $personId;
     private $firstName;
@@ -10,7 +10,7 @@ class Person{
     private $email;
     private $postalCode;
 
-    function __construct( $firstName, $lastName, $gender, $maidenName, $email, $postalCode,$personId = 0) {
+    function __construct($firstName, $lastName, $gender, $maidenName, $email, $postalCode, $personId = 0) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->gender = $gender;
@@ -44,7 +44,14 @@ class Person{
         $this->lastName = $lastName;
     }
 
-    public function getGender() {
+    public function getGender($getOriginalValue = false) {
+        if (!$getOriginalValue) {
+            if ($this->gender == "men") {
+                return "mężczyzna";
+            } elseif ($this->gender == "woman") {
+                return "kobieta";
+            }
+        }
         return $this->gender;
     }
 
@@ -76,6 +83,6 @@ class Person{
         $this->postalCode = $postalCode;
     }
 
-
 }
+
 ?>

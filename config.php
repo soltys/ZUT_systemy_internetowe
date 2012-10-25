@@ -3,6 +3,7 @@ include_once 'config.private.php';
 
 
 define('ABSPATH',  dirname(__FILE__).'/');
+define('LOGPATH', ABSPATH . "logs/");
 define('KLOGGER_ERROR_LEVEL', 7);
 
 

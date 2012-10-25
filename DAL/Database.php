@@ -3,7 +3,8 @@
 require_once dirname(dirname(__FILE__)) . "/config.php";
 require_once ABSPATH . "klogger/klogger.php";
 require_once ABSPATH . "model/Person.php";
-define('PERSON_TABLE', 'si_person');
+define('TABLE_PREFIX', "si_");
+define('PERSON_TABLE', TABLE_PREFIX . 'person');
 
 class Database {
 
@@ -35,10 +36,6 @@ class Database {
             $this->log->logAlert("Query failed to create a table `" . PERSON_TABLE . "` to database");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
-    }
-
-    public function getPersonTable() {
-        $peopleList = array();
     }
 
     public function addPerson($person) {
@@ -101,8 +98,37 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
         return $peopleList;
     }
 
+    public function getPerson($personId) {
+        $result = mysqli_query($this->mysqli, "SELECT * FROM " . PERSON_TABLE . " WHERE personId=$personId");
+        $row = mysqli_fetch_assoc($result);
+        $person = $this->createPerson($row);
+        if (!$result) {
+            $this->log->logAlert("Query failed select person from database, where personId is $personId");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+        mysqli_free_result($result);
+        return $person;
+    }
+
+    public function updatePerson($person) {
+        $query = "UPDATE " . PERSON_TABLE . " SET firstName='{$person->getFirstName()}',
+                                        lastName='{$person->getLastName()}',
+                                        gender='{$person->getGender(true)}',
+                                        maidenName='{$person->getMaidenName()}',
+                                        email='{$person->getEmail()}',
+                                        postalCode='{$person->getPostalCode()}'
+                                        WHERE personId={$person->getPersonId()}";
+
+        $result = mysqli_query($this->mysqli, $query);
+        if (!$result) {
+            $this->log->logAlert("Query failed update person from database, where personId is $personId, and query is " . $query);
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+    }
+
     public function deletePerson($personId) {
         $result = mysqli_query($this->mysqli, "DELETE FROM " . PERSON_TABLE . " WHERE `personId`=$personId");
+
         if (!$result) {
             $this->log->logAlert("Query failed delete person from database, where personId is $personId");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));

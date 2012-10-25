@@ -14,9 +14,8 @@ a {
     color:#369;
 }
 a:hover {
-    color:#fff;
-    background:#369;
-    text-decoration:none;
+    color:#123;
+    text-decoration:underline;
 }
 h1, h2, h3 {
     margin:.8em 0 .2em 0;
@@ -163,6 +162,9 @@ img {
     margin:0;
 }
 
+a>button{
+    text-decoration: none;
+}
 
 ul.nav{
     color:#369;

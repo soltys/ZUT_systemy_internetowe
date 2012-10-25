@@ -13,7 +13,6 @@ function getPostData($name) {
     if (isset($_POST[$name])) {
         if (empty($_POST[$name])) {
             $log->logNotice("$name is empty");
-
             $errorCount++;
         }
         return $_POST[$name];
