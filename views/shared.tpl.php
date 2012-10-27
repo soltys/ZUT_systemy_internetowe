@@ -36,8 +36,8 @@ $auth = Authentication::getInstance();
                         <ul class="nav">
                        <?php 
                             Controller::createNavigationLink("index", "Strona główna", 0);
-                            Controller::createNavigationLink("form", "Formularz", 1);
                             Controller::createNavigationLink("currentSession", "Podgląd sesji", 1);
+                            Controller::createNavigationLink("form", "Formularz", 1);
                             Controller::createNavigationLink("database", "Baza danych", 1);
                             Controller::createNavigationLink("editPerson", "Edytuj dane pracownika", 2);
                             Controller::createNavigationLink("deletePerson", "Usuń pracownika", 3);
