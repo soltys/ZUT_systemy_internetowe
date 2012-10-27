@@ -5,7 +5,7 @@ require_once ABSPATH . 'model/Person.php';
 require_once ABSPATH . 'common/Paginator.php';
 require_once ABSPATH . 'klogger/klogger.php';
 
-$log = KLogger::instance(ABSPATH . 'logs/search', KLOGGER_ERROR_LEVEL);
+$log = KLogger::instance(LOGPATH . 'search', KLOGGER_ERROR_LEVEL);
 if (isset($_POST['query'])) {
     $query = $_POST['query'];
 } else {
@@ -13,7 +13,12 @@ if (isset($_POST['query'])) {
 }
 
 $db = new Database();
-$people = $db->searchPeople('lastName', $query);
+$pieces = explode(" ", $query);
+$people = array();
+foreach($pieces as $piece)
+{
+    array_merge($people,$db->searchPeople('lastName', $piece));
+}
 $paginator = new Paginator($people);
 $page = Paginator::getPage();
 $pagePeople = $paginator->paginate($page);

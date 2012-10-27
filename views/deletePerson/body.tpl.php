@@ -26,6 +26,7 @@ if (isset($deletePersonId)) {
     if (isset($confirmDelete)) {
         $db->deletePerson($deletePersonId);
         header("Location: index.php?view=deletePerson");
+        Controller::gotoView("deletePerson");
     } else {
         print "<p>Czy chcesz usunąć ten rekord? </p>";
         print "<a href=\"index.php?view=deletePerson&personId=$deletePersonId&confirm=yes\"><button>Tak</button></a>";

@@ -32,10 +32,10 @@ class Database {
                 `email` varchar(256) NOT NULL,
                 `postalCode` varchar(256) NOT NULL,
                 PRIMARY KEY (`personId`)
-              ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;";
+              ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
         $personTableResult = mysqli_query($this->mysqli, $query);
         if (!$personTableResult) {
-            $this->log->logAlert("Query failed to create a table `" . PERSON_TABLE . "` to database");
+            $this->log->logAlert("Query failed to create a table `" . PERSON_TABLE . "` in database");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
 
@@ -51,22 +51,7 @@ class Database {
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ";
         $userTableResult = mysqli_query($this->mysqli, $query);
         if (!$userTableResult) {
-            $this->log->logAlert("Query failed to create a table `" . USER_TABLE . "` to database");
-            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
-        }
-    }
-
-    public function addPerson($person) {
-        $firstName = $person->getFirstName();
-        $lastName = $person->getLastName();
-        $gender = $person->getGender();
-        $maidenName = $person->getMaidenName();
-        $email = $person->getEmail();
-        $postalCode = $person->getPostalCode();
-        $result = mysqli_query($this->mysqli, "INSERT INTO " . PERSON_TABLE . " (firstName, lastName, gender, maidenName, email, postalCode)
-VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalCode')");
-        if (!$result) {
-            $this->log->logAlert("Query failed to add person to database");
+            $this->log->logAlert("Query failed to create a table `" . USER_TABLE . "` in database");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
     }
@@ -82,6 +67,33 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
 
         $person = new Person($firstName, $lastName, $gender, $maidenName, $email, $postalCode, $personId);
         return $person;
+    }
+
+    private function createUser($row) {
+        $userId = $row["userId"];
+        $login = $row["login"];
+        $password = $row["password"];
+        $rights = $row["rights"];
+        $firstName = $row["firstName"];
+        $lastName = $row["lastName"];
+
+        $user = new User($login, $password, $rights, $firstName, $lastName, $userId);
+        return $user;
+    }
+
+    public function addPerson($person) {
+        $firstName = $person->getFirstName();
+        $lastName = $person->getLastName();
+        $gender = $person->getGender();
+        $maidenName = $person->getMaidenName();
+        $email = $person->getEmail();
+        $postalCode = $person->getPostalCode();
+        $result = mysqli_query($this->mysqli, "INSERT INTO " . PERSON_TABLE . " (firstName, lastName, gender, maidenName, email, postalCode)
+VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalCode')");
+        if (!$result) {
+            $this->log->logAlert("Query failed to add person to database");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
     }
 
     public function getPeople() {
@@ -150,6 +162,47 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
         if (!$result) {
             $this->log->logAlert("Query failed delete person from database, where personId is $personId");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+
+        $row = mysqli_fetch_assoc($result);
+        $user = $this->createUser($row);
+        mysqli_free_result($result);
+    }
+
+    public function getUserByLogin($login) {
+        $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE . " WHERE login='$login'");
+        if (!$result) {
+            $this->log->logAlert("Query failed select users from database, where login is $login");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+
+        $row = mysqli_fetch_assoc($result);
+        $user = $this->createUser($row);
+        return $user;
+    }
+
+    public function isLoginExists($login) {
+        $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE . " WHERE login='$login'");
+        $rowsCount = mysqli_num_rows($result);
+        if (!$result) {
+            $this->log->logAlert("Query failed select users from database, where login is $login");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+
+        if ($rowsCount == 0) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
+    public function checkCredentials($login, $password) {
+        $user = $this->getUserByLogin($login);
+        if ($user->getPassword() == $password) {
+            return TRUE;
+        } else {
+            $this->log->logAlert("Failed to login with $login and $password");
+            return FALSE;
         }
     }
 

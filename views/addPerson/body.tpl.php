@@ -24,7 +24,7 @@ function getPostData($name) {
 }
 
 global $errorCount;
-$log = KLogger::instance(ABSPATH . 'logs/addPerson',KLOGGER_ERROR_LEVEL);
+$log = KLogger::instance(LOGPATH . 'addPerson',KLOGGER_ERROR_LEVEL);
 $firstName = getPostData("firstName");
 $lastName = getPostData("lastName");
 $gender = getPostData("gender");

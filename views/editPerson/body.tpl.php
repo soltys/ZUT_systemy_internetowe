@@ -59,8 +59,8 @@ if (isset($editPersonId)) {
             print"<p>Liczba błędów w formularzu: $errorCount </p>";
         } else {
             $person = new Person($firstName, $lastName, $gender, $maidenName, $email, $postalCode, $editPersonId);
-            $db->updatePerson($person);
-            header("Location: index.php?view=database");
+            $db->updatePerson($person);            
+            Controller::gotoView("database");
         }
     } else {
         $person = $db->getPerson($editPersonId);

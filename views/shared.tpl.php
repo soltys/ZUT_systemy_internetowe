@@ -1,6 +1,8 @@
 <?php
 require_once 'config.php';
 require_once ABSPATH . 'DAL/SessionManager.php';
+require_once ABSPATH . 'common/Authentication.php';
+$auth = Authentication::getInstance();
 ?>
 <html>
     <head>
@@ -32,27 +34,35 @@ require_once ABSPATH . 'DAL/SessionManager.php';
                     <div class="col2">
 
                         <ul class="nav">
-                            <li><a href="index.php">Strona główna</a></li>
-                            <li><a href="index.php?view=form" >Formularz</a></li>
-                            <li><a href="index.php?view=currentSession" >Podgląd sesji</a></li>
-                            <li><a href="index.php?view=database">Baza danych</a></li>
-                            <li><a href="index.php?view=editPerson">Edytuj dane pracownika</a></li>
-                            <li><a href="index.php?view=deletePerson">Usuń pracownika</a></li>
+                       <?php 
+                            Controller::createNavigationLink("index", "Strona główna", 0);
+                            Controller::createNavigationLink("form", "Formularz", 1);
+                            Controller::createNavigationLink("currentSession", "Podgląd sesji", 1);
+                            Controller::createNavigationLink("database", "Baza danych", 1);
+                            Controller::createNavigationLink("editPerson", "Edytuj dane pracownika", 2);
+                            Controller::createNavigationLink("deletePerson", "Usuń pracownika", 3);
+                            Controller::createNavigationLink("admin", "Panel administratora", 4);
+                            ?>
+                            
                         </ul>
 
                     </div>
                     <div class="col3">
                         <?php
-                        if ($this->sidebar) {
-                            print $this->sidebar;
-                        } else {
+                        print $this->sidebar;
+                        if (!$auth->isUserLoggedIn()) {
                             ?>
-
-                            <ul>
-                                <li><a href="http://google.com">google</a></li>
-                                <li><a href="http://onet.pl">Onet</a></li>
+                            <ul class="nav">
+                                <li><a href="index.php?view=login">Login</a></li>
+                                <li><a href="index.php?view=register">Rejestracja</a></li>
                             </ul>
                             <?php
+                        } else {
+                        ?>
+                        <ul class="nav">
+                            <li><a href="index.php?view=logout">Wyloguj</a></li>
+                        </ul>
+                        <?php
                         }
                         ?>
                     </div>
