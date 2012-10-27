@@ -51,6 +51,14 @@ class Controller {
         return $this->page->parse();
     }
 
+    public static function getCurrentView() {
+        if (isset($_GET["view"])) {
+            return $_GET["view"];
+        } else {
+            return "index";
+        }
+    }
+
     public static function gotoView($viewName, $params = NULL) {
         $header = "Location: index.php?view=$viewName";
         if (isset($params)) {
@@ -58,9 +66,8 @@ class Controller {
         }
         header($header);
     }
-    
-    public static function createNavigationLink($viewName,$linkName, $rights)
-    {
+
+    public static function createNavigationLink($viewName, $linkName, $rights) {
         $auth = Authentication::getInstance();
         if ($auth->isUserHaveRights($rights)) {
             echo "<li><a href=\"index.php?view=$viewName\">$linkName</a></li>";

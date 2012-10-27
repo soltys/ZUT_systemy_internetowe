@@ -44,16 +44,17 @@ class Paginator {
 
     public function paginationNavigation($page) {
         $totalPages =  $this->getTotalPages();
+        $currentView = Controller::getCurrentView();
         if ($page > 1) {
             $prev = $page - 1;
-            print "<a href=\"index.php?view=database&page=$prev\" class=\"navigation_prev\" >&lt;</a>";
+            print "<a href=\"index.php?view=$currentView&page=$prev\" class=\"navigation_prev\" >&lt;</a>";
         }
         for ($i = 1; $i < $totalPages + 1; $i++) {
-            print "<a href=\"index.php?view=database&page=$i\" class=\"navigation_number\">$i</a>";
+            print "<a href=\"index.php?view=$currentView&page=$i\" class=\"navigation_number\">$i</a>";
         }
         if ($page < $totalPages) {
             $next = $page + 1;
-            print "<a href=\"index.php?view=database&page=$next\" class=\"navigation_next\">&gt;</a>";
+            print "<a href=\"index.php?view=$currentView&page=$next\" class=\"navigation_next\">&gt;</a>";
         }
     }
 
