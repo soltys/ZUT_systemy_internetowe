@@ -2,7 +2,7 @@
 require_once dirname(dirname(__FILE__)) . '/config.php';
 require_once ABSPATH . 'model/User.php';
 require_once ABSPATH . "common/Authentication.php";
-
+require_once ABSPATH . "common/ErrorCollector.php";
 
 function getPostData($name) {
     if (isset($_POST[$name])) {
@@ -15,48 +15,41 @@ function getPostData($name) {
     }
 }
 
-function addErrorMessage(&$modelErrors, $key, $message) {
-    if (isset($modelErrors[$key])) {
-        $modelErrors[$key] .= $message;
-    } else {
-        $modelErrors[$key] = $message;
-    }
-}
-
 $auth = Authentication::getInstance();
+$log = KLogger::instance(LOGPATH . 'register', KLOGGER_ERROR_LEVEL);
 if (isset($_GET['action'])) {
     $actionName = $_GET['action'];
-    $modelErrors = array();
+    $errorCollector = new ErrorCollector("register");
     if ($actionName == "register") {
         $login = getPostData("login");
         if ($login == NULL) {
-            addErrorMessage($modelErrors, "login", "Nie wprowadzono loginu\n");
+            $errorCollector->addErrorMessage( "login", "Nie wprowadzono loginu\n");
         }
         if (strlen($login) < 6) {
-            addErrorMessage($modelErrors, "password", "Login krótszy niż 6 znaków\n");
+            $errorCollector->addErrorMessage( "password", "Login krótszy niż 6 znaków\n");
         }
         if ($auth->isLoginExits($login)) {
-            addErrorMessage($modelErrors, "login", "Taki login już istnieje\n");
+            $errorCollector->addErrorMessage( "login", "Taki login już istnieje\n");
         }
 
         $password = getPostData("password");
         if ($password == NULL) {
-            addErrorMessage($modelErrors, "password", "Nie wprowadzono hasła\n");
+            $errorCollector->addErrorMessage( "password", "Nie wprowadzono hasła\n");
         }
         if (strlen($password) < 6) {
-            addErrorMessage($modelErrors, "password", "Hasło krótsze niż 6 znaków\n");
+            $errorCollector->addErrorMessage( "password", "Hasło krótsze niż 6 znaków\n");
         }
 
         $passwordAgain = getPostData("passwordAgain");
         if ($passwordAgain == NULL) {
-            addErrorMessage($modelErrors, "passwordAgain", "Nie wprowadzono ponownie hasła\n");
+            $errorCollector->addErrorMessage( "passwordAgain", "Nie wprowadzono ponownie hasła\n");
         }
         if ($password != $passwordAgain) {
-            addErrorMessage($modelErrors, "passwordAgain", "Hasła się nie zgadzają\n");
+            $errorCollector->addErrorMessage( "passwordAgain", "Hasła się nie zgadzają\n");
         }
 
-        if (count($modelErrors) > 0) {
-            displayForm($modelErrors);
+        if (count($errorCollector->getErrorModel()) > 0) {
+            displayForm($errorCollector->getErrorModel());
         } else {
             $firstName = getPostData("firstName");
             $lastName = getPostData("firstName");
