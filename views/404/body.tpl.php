@@ -5,4 +5,4 @@
  * and open the template in the editor.
  */
 ?>
-<h1>4-0-4</h1>
+<h1>Strona nie istnieje</h1>

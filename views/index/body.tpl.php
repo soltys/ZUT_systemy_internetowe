@@ -5,6 +5,6 @@ $auth = Authentication::getInstance();
 <h1>To jest strona główna</h1>
 <?php
 if ($auth->isUserLoggedIn()) {
-    echo "<p>Witaj ... </p>";
+    echo "<p>Witaj {$auth->getUserFirstName()}</p>";
 }
 ?>

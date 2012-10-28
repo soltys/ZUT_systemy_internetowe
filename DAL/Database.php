@@ -3,6 +3,7 @@
 require_once dirname(dirname(__FILE__)) . "/config.php";
 require_once ABSPATH . "klogger/klogger.php";
 require_once ABSPATH . "model/Person.php";
+require_once ABSPATH . "model/User.php";
 define('TABLE_PREFIX', "si_");
 define('PERSON_TABLE', TABLE_PREFIX . 'person');
 define('USER_TABLE', TABLE_PREFIX . 'user');
@@ -164,15 +165,43 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
 
-        $row = mysqli_fetch_assoc($result);
-        $user = $this->createUser($row);
-        mysqli_free_result($result);
     }
-
+// USER
+    /**     
+     * @param User $user
+     */
+    public function addUser($user)
+    {
+        $login = $user->getLogin();
+        $password = $user->getPassword();
+        $rights = $user->getRights();
+        $firstName = $user->getFirstName();
+        $lastName = $user->getLastName();
+        
+           $result = mysqli_query($this->mysqli, "INSERT INTO " . USER_TABLE . " (login, password, rights, firstName, lastName)
+VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
+        if (!$result) {
+            $this->log->logAlert("Query failed to add person to database");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+                
+    }
     public function getUserByLogin($login) {
         $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE . " WHERE login='$login'");
         if (!$result) {
             $this->log->logAlert("Query failed select users from database, where login is $login");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+
+        $row = mysqli_fetch_assoc($result);
+        $user = $this->createUser($row);
+        return $user;
+    }
+    
+     public function getUser($userId) {
+        $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE . " WHERE userId=$userId");
+        if (!$result) {
+            $this->log->logAlert("Query failed select user from database, where userId is $userId");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
 
@@ -189,7 +218,7 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
 
-        if ($rowsCount == 0) {
+        if ($rowsCount == 1) {
             return TRUE;
         } else {
             return FALSE;

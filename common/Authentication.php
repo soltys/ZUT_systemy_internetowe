@@ -42,10 +42,23 @@ class Authentication {
     public function checkCredentials($login, $password) {
         return $this->db->checkCredentials($login, $password);
     }
-    
-    public function isUserHaveRights($rights)
-    {
-       return $this->sm->getUserRights() >= $rights;
+
+    public function isUserHaveRights($rights) {
+        return $this->sm->getUserRights() >= $rights;
+    }
+
+    public function getUserFirstName() {
+        $userId = $this->sm->getLoggedUserId();
+        if (isset($userId)) {
+            $user = $this->db->getUser($userId);
+            return $user->getFirstName();
+        }
+        return "";
+    }
+
+    public function addUser($user) {
+        $this->db->addUser($user);
+        $this->login($user->getLogin());
     }
 
     public function login($login) {
@@ -56,10 +69,9 @@ class Authentication {
 
     public function logout() {
         $this->sm->setLoggedUserId(NULL);
-        $this->sm->setUserRights(NULL);      
+        $this->sm->setUserRights(NULL);
     }
-    
-  
+
 }
 
 ?>

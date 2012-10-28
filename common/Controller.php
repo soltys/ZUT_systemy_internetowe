@@ -5,18 +5,23 @@ require_once ABSPATH . 'common/TemplateEngine.php';
 require_once ABSPATH . 'klogger/klogger.php';
 require_once ABSPATH . 'common/Authentication.php';
 define('VIEW_404', '404');
+define('VIEW_403', '403');
 
 class Controller {
 
     private $page;
     private $log;
-    private $publicViews;
+    private $viewRights;
     private $auth;
 
     public function __construct() {
-        $this->log = KLogger::instance(ABSPATH . '/logs/Controller', KLOGGER_ERROR_LEVEL);
+        $this->log = KLogger::instance(LOGPATH . 'Controller', KLOGGER_ERROR_LEVEL);
         $this->auth = Authentication::getInstance();
-        $this->publicViews = array("index", "login", "logout", "register", VIEW_404);
+        $level1 = array("form", "currentSession", "database", "userInfo");
+        $level2 = array("editPerson");
+        $level3 = array("deletePerson");
+        $level4 = array("editUser", "deleteUser");
+        $this->viewRights = array(1 => $level1, 2 => $level2, 3 => $level3, 4 => $level4);
     }
 
     private function loadSegment($viewName, $segmentName) {
@@ -34,14 +39,14 @@ class Controller {
     public function getView($viewName) {
         if (!$this->isViewExists($viewName)) {
             $this->log->logError("View '" . $viewName . "' do not exists");
-            $viewName = VIEW_404;
+            Controller::gotoView(VIEW_404);
         }
 
-        if (!in_array($viewName, $this->publicViews)) {
-            if (!$this->auth->isUserLoggedIn()) {
-                header("Location: index.php?view=login");
-            }
+        if (!$this->auth->isUserHaveRights($this->getViewRights($viewName))) {
+            $this->log->logError("User tried to reach '" . $viewName . "' but user is unauthorized ");
+            Controller::gotoView(VIEW_403);
         }
+
         $this->page = new TemplateEngine("views/shared.tpl.php");
         $this->log->logInfo("loading shared template");
 
@@ -51,6 +56,18 @@ class Controller {
         return $this->page->parse();
     }
 
+    private function getViewRights($viewName) {
+        foreach ($this->viewRights as $key => $viewNames) {
+            foreach ($viewNames as $name) {
+                if ($viewName == $name) {
+                    return $key;
+                }
+            }
+        }
+        return 0;
+    }
+
+// *** STATIC FUNCTIONS ***
     public static function getCurrentView() {
         if (isset($_GET["view"])) {
             return $_GET["view"];
@@ -67,12 +84,7 @@ class Controller {
         header($header);
     }
 
-    public static function createNavigationLink($viewName, $linkName, $rights) {
-        $auth = Authentication::getInstance();
-        if ($auth->isUserHaveRights($rights)) {
-            echo "<li><a href=\"index.php?view=$viewName\">$linkName</a></li>";
-        }
-    }
+   
 
 }
 

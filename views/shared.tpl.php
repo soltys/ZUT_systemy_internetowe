@@ -2,6 +2,7 @@
 require_once 'config.php';
 require_once ABSPATH . 'DAL/SessionManager.php';
 require_once ABSPATH . 'common/Authentication.php';
+require_once ABSPATH . "common/Html.php";
 $auth = Authentication::getInstance();
 ?>
 <html>
@@ -35,13 +36,15 @@ $auth = Authentication::getInstance();
 
                         <ul class="nav">
                        <?php 
-                            Controller::createNavigationLink("index", "Strona główna", 0);
-                            Controller::createNavigationLink("currentSession", "Podgląd sesji", 1);
-                            Controller::createNavigationLink("form", "Formularz", 1);
-                            Controller::createNavigationLink("database", "Baza danych", 1);
-                            Controller::createNavigationLink("editPerson", "Edytuj dane pracownika", 2);
-                            Controller::createNavigationLink("deletePerson", "Usuń pracownika", 3);
-                            Controller::createNavigationLink("admin", "Panel administratora", 4);
+                            Html::createNavigationLink("index", "Strona główna", 0);
+                            Html::createNavigationLink("currentSession", "Podgląd sesji", 1);
+                            Html::createNavigationLink("form", "Formularz", 1);
+                            Html::createNavigationLink("database", "Baza danych", 1);
+                            Html::createNavigationLink("editPerson", "Edytuj dane pracownika", 2);
+                            Html::createNavigationLink("deletePerson", "Usuń pracownika", 3);
+                            Html::createNavigationLink("userInfo", "Zmień dane", 1);
+                            Html::createNavigationLink("editUser", "Zmień poziom dostępu", 4);
+                            Html::createNavigationLink("deleteUser", "Usuń użytkownika", 4);
                             ?>
                             
                         </ul>
