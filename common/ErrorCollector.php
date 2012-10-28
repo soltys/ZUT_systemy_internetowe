@@ -27,6 +27,8 @@ class ErrorCollector {
         } else {
             $this->errors[$key] = $message;
         }
+        
+        $this->log->logNotice("Key: $key Message: $message");
     }
 
 }
