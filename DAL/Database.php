@@ -57,6 +57,11 @@ class Database {
         }
     }
 
+    /**
+     * 
+     * @param type $row
+     * @return Person
+     */
     private function createPerson($row) {
         $personId = $row["personId"];
         $firstName = $row["firstName"];
@@ -141,6 +146,10 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
         return $person;
     }
 
+    /**
+     * 
+     * @param Person $person
+     */
     public function updatePerson($person) {
         $query = "UPDATE " . PERSON_TABLE . " SET firstName='{$person->getFirstName()}',
                                         lastName='{$person->getLastName()}',
@@ -152,7 +161,7 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
 
         $result = mysqli_query($this->mysqli, $query);
         if (!$result) {
-            $this->log->logAlert("Query failed update person from database, where personId is $personId, and query is " . $query);
+            $this->log->logAlert("Query failed update person from database, where personId is {$person->getPersonId()}, and query is " . $query);
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
     }
@@ -164,35 +173,52 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
             $this->log->logAlert("Query failed delete person from database, where personId is $personId");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
-
     }
+
 // USER
-    /**     
+
+    /**
+     * @return Array Array of users
+     */
+    public function getUsers() {
+        $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE);
+        if (!$result) {
+            $this->log->logAlert("Query failed select all users from database");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+            return array();
+        }
+        $userList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $user = $this->createUser($row);
+            array_push($userList, $user);
+        }
+        mysqli_free_result($result);
+        return $userList;
+    }
+
+    /**
      * @param User $user
      */
-    public function addUser($user)
-    {
+    public function addUser($user) {
         $login = $user->getLogin();
         $password = $user->getPassword();
         $rights = $user->getRights();
         $firstName = $user->getFirstName();
         $lastName = $user->getLastName();
-        
-           $result = mysqli_query($this->mysqli, "INSERT INTO " . USER_TABLE . " (login, password, rights, firstName, lastName)
+
+        $result = mysqli_query($this->mysqli, "INSERT INTO " . USER_TABLE . " (login, password, rights, firstName, lastName)
 VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
         if (!$result) {
             $this->log->logAlert("Query failed to add person to database");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
-                
     }
-    
+
     /**
      * @param User $user
      */
-    public function updateUser($user)
-    {
-         $query = "UPDATE " . USER_TABLE . " SET firstName='{$user->getFirstName()}',
+    public function updateUser($user) {
+        $query = "UPDATE " . USER_TABLE . " SET firstName='{$user->getFirstName()}',
                                         lastName='{$user->getLastName()}',
                                         login='{$user->getLogin()}',
                                         password='{$user->getPassword()}'                                       
@@ -204,6 +230,20 @@ VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
     }
+    /**
+     * 
+     * @param int $userId
+     */
+    public function deleteUser($userId)
+    {
+        $result = mysqli_query($this->mysqli, "DELETE FROM " . USER_TABLE . " WHERE `userId`=$userId");
+
+        if (!$result) {
+            $this->log->logAlert("Query failed delete user from database, where userId is $userId");
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+    }
+
     public function getUserByLogin($login) {
         $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE . " WHERE login='$login'");
         if (!$result) {
@@ -215,8 +255,8 @@ VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
         $user = $this->createUser($row);
         return $user;
     }
-    
-     public function getUser($userId) {
+
+    public function getUser($userId) {
         $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE . " WHERE userId=$userId");
         if (!$result) {
             $this->log->logAlert("Query failed select user from database, where userId is $userId");

@@ -22,7 +22,7 @@ $auth = Authentication::getInstance();
     <body>
 
         <div id="header">
-            <h1>Header</h1>
+            <h1>-_SYSTEMY INTERNETOWE_-</h1>
         </div>
         <div class="colmask holygrail">
             <div class="colmid">

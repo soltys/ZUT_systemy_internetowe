@@ -19,13 +19,13 @@ $page = Paginator::getPage();
 $pagePeople = $paginator->paginate($page);
 ?>
 
-<h2>Usuń pracownika</h2>
+<h2>Usuń użytkownika</h2>
 
 <?php
 if (isset($deletePersonId)) {
     if (isset($confirmDelete)) {
         $db->deletePerson($deletePersonId);
-        header("Location: index.php?view=deletePerson");
+        
         Controller::gotoView("deletePerson");
     } else {
         print "<p>Czy chcesz usunąć ten rekord? </p>";
