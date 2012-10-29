@@ -186,6 +186,24 @@ VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
         }
                 
     }
+    
+    /**
+     * @param User $user
+     */
+    public function updateUser($user)
+    {
+         $query = "UPDATE " . USER_TABLE . " SET firstName='{$user->getFirstName()}',
+                                        lastName='{$user->getLastName()}',
+                                        login='{$user->getLogin()}',
+                                        password='{$user->getPassword()}'                                       
+                                        WHERE userId={$user->getUserId()}";
+
+        $result = mysqli_query($this->mysqli, $query);
+        if (!$result) {
+            $this->log->logAlert("Query failed update user from database, where personId is {$user->getUserId()}, and query is " . $query);
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+    }
     public function getUserByLogin($login) {
         $result = mysqli_query($this->mysqli, "SELECT * FROM " . USER_TABLE . " WHERE login='$login'");
         if (!$result) {
