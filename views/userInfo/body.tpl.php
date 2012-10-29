@@ -16,55 +16,62 @@ function getPostData($name) {
 }
 
 $auth = Authentication::getInstance();
-$log = KLogger::instance(LOGPATH . 'register', KLOGGER_ERROR_LEVEL);
+
 if (isset($_GET['action'])) {
     $actionName = $_GET['action'];
-    $errorCollector = new ErrorCollector("register");
-    if ($actionName == "register") {
+    $errorCollector = new ErrorCollector("userInfo");    
+    if ($actionName == "update") {
         $login = getPostData("login");
+        $oldUser = $auth->getCurrentUser();
+        $oldLogin = $oldUser->getLogin();
         if ($login == NULL) {
-            $errorCollector->addErrorMessage( "login", "Nie wprowadzono loginu\n");
+            $errorCollector->addErrorMessage("login", "Nie wprowadzono loginu\n");
         }
         if (strlen($login) < 6) {
-            $errorCollector->addErrorMessage( "password", "Login krótszy niż 6 znaków\n");
+            $errorCollector->addErrorMessage("password", "Login krótszy niż 6 znaków\n");
         }
-        if ($auth->isLoginExits($login)) {
-            $errorCollector->addErrorMessage( "login", "Taki login już istnieje\n");
+        if ($login != $oldLogin && $auth->isLoginExits($login)) {
+            $errorCollector->addErrorMessage("login", "Taki login już istnieje\n");
         }
 
         $password = getPostData("password");
         if ($password == NULL) {
-            $errorCollector->addErrorMessage( "password", "Nie wprowadzono hasła\n");
+            $errorCollector->addErrorMessage("password", "Nie wprowadzono hasła\n");
         }
         if (strlen($password) < 6) {
-            $errorCollector->addErrorMessage( "password", "Hasło krótsze niż 6 znaków\n");
+            $errorCollector->addErrorMessage("password", "Hasło krótsze niż 6 znaków\n");
         }
 
         $passwordAgain = getPostData("passwordAgain");
         if ($passwordAgain == NULL) {
-            $errorCollector->addErrorMessage( "passwordAgain", "Nie wprowadzono ponownie hasła\n");
+            $errorCollector->addErrorMessage("passwordAgain", "Nie wprowadzono ponownie hasła\n");
         }
         if ($password != $passwordAgain) {
-            $errorCollector->addErrorMessage( "passwordAgain", "Hasła się nie zgadzają\n");
+            $errorCollector->addErrorMessage("passwordAgain", "Hasła się nie zgadzają\n");
         }
 
         if (count($errorCollector->getErrorModel()) > 0) {
             displayForm($errorCollector->getErrorModel());
         } else {
+            $userId = getPostData("userId");
             $firstName = getPostData("firstName");
             $lastName = getPostData("firstName");
-            $rights = 0;
 
-            $user = new User($login, $password, $rights, $firstName, $lastName);
-            $auth->addUser($user);
-            Controller::gotoView("index");
+            $user = new User($login, $password, $oldUser->getRights(), $firstName, $lastName, $userId);
+            $auth->updateUser($user);
+            Controller::gotoView("userInfo","action=success");
         }
+    }
+    if ($actionName == "success") {
+     echo "<h2>Zakutalizowano dane</h2>";
     }
 } else {
     displayForm();
 }
 
 function displayForm($modelErrors = array()) {
+    $auth = Authentication::getInstance();
+    $user = $auth->getCurrentUser();
 
     function getErrorMessage($modelErrors, $key) {
         if (isset($modelErrors[$key])) {
@@ -77,19 +84,20 @@ function displayForm($modelErrors = array()) {
         }
     }
     ?>
-    <h1>Rejestracja</h1>
+    <h1>Zminana danych użytkownika</h1>
 
-    <form action="index.php?view=register&action=register" method="post">
+    <form action="index.php?view=userInfo&action=update" method="post">
+        <input type="hidden" name="userId" <?php print " value=\"{$user->getUserId()}\" "; ?>/>
         <table border=0>
             <tbody>
                 <tr>
                     <td>Login </td>
-                    <td><input type="text" name="login"/></td>
+                    <td><input type="text" name="login" <?php print " value=\"{$user->getLogin()}\" "; ?>/></td>
                     <td><?php getErrorMessage($modelErrors, "login") ?></td> 
                 </tr>
                 <tr>
                     <td>Hasło </td>
-                    <td><input type="password" name="password"/></td>
+                    <td><input type="password" name="password" /></td>
                     <td> <?php getErrorMessage($modelErrors, "password") ?> </td>
                 </tr>
                 <tr>
@@ -99,17 +107,17 @@ function displayForm($modelErrors = array()) {
                 </tr>
                 <tr>
                     <td>Imię </td>
-                    <td><input type="text" name="firstName"</td>
+                    <td><input type="text" name="firstName"  <?php print " value=\"{$user->getFirstName()}\" "; ?>/> </td>
                     <td> <?php getErrorMessage($modelErrors, "fistName") ?> </td>
                 </tr>
                 <tr>
                     <td>Nazwisko </td>
-                    <td><input type="text" name="lastName"/></td>
+                    <td><input type="text" name="lastName" <?php print " value=\"{$user->getLastName()}\" "; ?>/></td>
                     <td> <?php getErrorMessage($modelErrors, "lastName") ?> </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td><input type="submit" value="Rejestruj"/></td>
+                    <td><input type="submit" value="Zapisz dane"/></td>
+                    <td><a href="index.php?view=index"><button type="button">Odrzuć zmiany</button></a></td>
                 </tr>
             </tbody>
         </table>

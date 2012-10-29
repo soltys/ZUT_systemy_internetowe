@@ -108,7 +108,7 @@ if (isset($editPersonId)) {
                     </tr>
                     <tr>
                         <td><input type="submit" value="Potwierdź zmiany"/></td>
-                        <td><a href="index.php?view=database"><button>Odrzuć zmiany</button></a></td>
+                        <td><a href="index.php?view=database"><button type="button">Odrzuć zmiany</button></a></td>
                     </tr>
                 </tbody>
             </table>
