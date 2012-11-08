@@ -16,9 +16,10 @@ class Authentication {
     private $sm;
     private $db;
     private static $oInstance = false;
-/**
- * @return Authentication
- */
+
+    /**
+     * @return Authentication
+     */
     public static function getInstance() {
         if (self::$oInstance == false) {
             self::$oInstance = new Authentication();
@@ -49,7 +50,7 @@ class Authentication {
         return $this->sm->getUserRights() >= $rights;
     }
 
-    /**    
+    /**
      * @return User
      */
     public function getCurrentUser() {
@@ -71,13 +72,23 @@ class Authentication {
         $this->db->addUser($user);
         $this->login($user->getLogin());
     }
-    /**     
+
+    /**
      * @param User $user
      */
-public function updateUser($user)
-{
-    $this->db->updateUser($user);
-}
+    public function updateUser($user) {
+        $this->db->updateUser($user);
+    }
+
+    /**
+     * Updates rights in database for $userId
+     * @param int $user
+     * @param int $newRights
+     */
+    public function updateUserRights($userId, $newRights) {
+        $this->db->updateRights($userId, $newRights);
+    }
+
     public function login($login) {
         $user = $this->db->getUserByLogin($login);
         $this->sm->setLoggedUserId($user->getUserId());

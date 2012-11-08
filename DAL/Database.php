@@ -58,7 +58,7 @@ class Database {
     }
 
     /**
-     * 
+     *
      * @param type $row
      * @return Person
      */
@@ -147,7 +147,7 @@ VALUES ('$firstName', '$lastName', '$gender', '$maidenName', '$email', '$postalC
     }
 
     /**
-     * 
+     *
      * @param Person $person
      */
     public function updatePerson($person) {
@@ -221,7 +221,7 @@ VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
         $query = "UPDATE " . USER_TABLE . " SET firstName='{$user->getFirstName()}',
                                         lastName='{$user->getLastName()}',
                                         login='{$user->getLogin()}',
-                                        password='{$user->getPassword()}'                                       
+                                        password='{$user->getPassword()}'
                                         WHERE userId={$user->getUserId()}";
 
         $result = mysqli_query($this->mysqli, $query);
@@ -230,12 +230,28 @@ VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
             $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
         }
     }
+
     /**
-     * 
+     *
+     * @param int $userId
+     * @param int $newRights
+     */
+    public function updateRights($userId, $newRights) {
+        $query = "UPDATE " . USER_TABLE . " SET rights=$newRights 
+                                        WHERE userId=$userId";
+
+        $result = mysqli_query($this->mysqli, $query);
+        if (!$result) {
+            $this->log->logAlert("Query failed update user rights in database, where personId is $userId, and query is " . $query);
+            $this->log->logAlert("Error: %s\n", mysqli_error($this->mysqli));
+        }
+    }
+
+    /**
+     *
      * @param int $userId
      */
-    public function deleteUser($userId)
-    {
+    public function deleteUser($userId) {
         $result = mysqli_query($this->mysqli, "DELETE FROM " . USER_TABLE . " WHERE `userId`=$userId");
 
         if (!$result) {

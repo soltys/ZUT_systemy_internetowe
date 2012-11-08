@@ -35,7 +35,7 @@ $auth = Authentication::getInstance();
                     <div class="col2">
 
                         <ul class="nav">
-                       <?php 
+                       <?php
                             Html::createNavigationLink("index", "Strona główna", 0);
                             Html::createNavigationLink("currentSession", "Podgląd sesji", 1);
                             Html::createNavigationLink("form", "Formularz", 1);
@@ -43,10 +43,10 @@ $auth = Authentication::getInstance();
                             Html::createNavigationLink("editPerson", "Edytuj dane pracownika", 2);
                             Html::createNavigationLink("deletePerson", "Usuń pracownika", 3);
                             Html::createNavigationLink("userInfo", "Zmień dane", 1);
-                            Html::createNavigationLink("editUser", "Zmień poziom dostępu", 4);
+                            Html::createNavigationLink("changeUserRights", "Zmień poziom dostępu", 4);
                             Html::createNavigationLink("deleteUser", "Usuń użytkownika", 4);
                             ?>
-                            
+
                         </ul>
 
                     </div>

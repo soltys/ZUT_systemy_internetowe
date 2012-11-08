@@ -8,6 +8,15 @@ class Html {
             echo "<li><a href=\"index.php?view=$viewName\">$linkName</a></li>";
         }
     }
+
+    public static function createSelectedOption($number, $selectedValue)
+    {
+        echo "<option ";
+        if ($number == $selectedValue) {
+            echo "selected=\"selected\"";
+        }
+            echo " >$number</option>";
+    }
 }
 
 ?>
