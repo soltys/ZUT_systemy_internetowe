@@ -48,7 +48,7 @@ class Person {
         if (!$getOriginalValue) {
             if ($this->gender == "men") {
                 return "mężczyzna";
-            } elseif ($this->gender == "woman") {
+            } elseif ($this->gender == "women") {
                 return "kobieta";
             }
         }
