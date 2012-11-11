@@ -1,6 +1,7 @@
 /* <!-- */
 /* General styles */
 body {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
     margin:0;
     padding:0;
     border:0;			/* This removes the border around the viewport in old versions of IE */
@@ -28,156 +29,63 @@ p {
 img {
     margin:10px 0 5px;
 }
-/* Header styles */
-#header {
-    clear:both;
-    float:left;
-    width:100%;
+#container{
+	margin:0px;
+	padding:0px;
+        position: relative;
+	min-width:900px;
+
 }
-#header {
-    border-bottom:1px solid #000;
+#header,#footer{
+	height:60px;
+	text-align: left;
+        color:#adb594;
+	background-color:#25050c;
+	margin:0px 0px 0px 0px;
 }
-#header p,
-#header h1,
-#header h2 {
-    padding:.4em 15px 0 15px;
-    margin:0;
+#left_sidebar{
+        position: absolute;
+        top:70px;
+        left:-40px;
+        width: 240px;
 }
-#header ul {
-    clear:left;
-    float:left;
-    width:100%;
-    list-style:none;
-    margin:10px 0 0 0;
-    padding:0;
+#content{
+	margin: 0px 210px 0px 210px;
+	background-color:#fff;
+        height:500px;
+        overflow: auto;
+
 }
-#header ul li {
-    display:inline;
-    list-style:none;
-    margin:0;
-    padding:0;
+#right_sidebar{
+        position: absolute;
+        top: 70px;
+        right: 0px;
+        width: 200px;
+        background-color:#fff;
+        margin-bottom: 10px;
 }
-#header ul li a {
-    display:block;
-    float:left;
-    margin:0 0 0 1px;
-    padding:3px 10px;
-    text-align:center;
-    background:#eee;
-    color:#000;
-    text-decoration:none;
-    position:relative;
-    left:15px;
-    line-height:1.3em;
+
+ul.nav
+{
+	list-style-type:none;
+        margin: 0px;
 }
-#header ul li a:hover {
-    background:#369;
-    color:#fff;
+li.menuItem
+{
+	background-color:#eee;
+	margin: 0px 0px 10px 0px;
+        font-size: 17px;
+        text-decoration: none;
+        border:1px dotted;
+        padding-left: 10px;
 }
-#header ul li a.active,
-#header ul li a.active:hover {
-    color:#fff;
-    background:#000;
-    font-weight:bold;
-}
-#header ul li a span {
-    display:block;
-}
-/* 'widths' sub menu */
-#layoutdims {
-    clear:both;
-    background:#eee;
-    border-top:4px solid #000;
-    margin:0;
-    padding:6px 15px !important;
-    text-align:right;
-}
-/* column container */
-.colmask {
-    position:relative;		/* This fixes the IE7 overflow hidden bug and stops the layout jumping out of place */
-    clear:both;
-    float:left;
-    width:100%;				/* width of whole page */
-    overflow:hidden;		/* This chops off any overhanging divs */
-}
-/* holy grail 3 column settings */
-.holygrail {
-    background:#eee;    	/* Right column background colour */
-}
-.holygrail .colmid {
-    float:left;
-    width:200%;
-    margin-left:-200px; 	/* Width of right column */
-    position:relative;
-    right:100%;
-    background:#fff;    	/* Centre column background colour */
-}
-.holygrail .colleft {
-    float:left;
-    width:100%;
-    margin-left:-50%;
-    position:relative;
-    left:400px;         	/* Left column width + right column width */
-    background:#eee;    	/* Left column background colour */
-}
-.holygrail .col1wrap {
-    float:left;
-    width:50%;
-    position:relative;
-    right:200px;        	/* Width of left column */
-    padding-bottom:1em; 	/* Centre column bottom padding. Leave it out if it's zero */
-}
-.holygrail .col1 {
-    margin:0 215px;     	/* Centre column side padding:
-                            Left padding = left column width + centre column left padding width
-                            Right padding = right column width + centre column right padding width */
-    position:relative;
-    left:200%;
-    overflow:hidden;
-}
-.holygrail .col2 {
-    float:left;
-    float:right;			/* This overrides the float:left above */
-    width:170px;        	/* Width of left column content (left column width minus left and right padding) */
-    position:relative;
-    right:15px;         	/* Width of the left-had side padding on the left column */
-}
-.holygrail .col3 {
-    float:left;
-    float:right;			/* This overrides the float:left above */
-    width:170px;        	/* Width of right column content (right column width minus left and right padding) */
-    margin-right:45px;  	/* Width of right column right-hand padding + left column left and right padding */
-    position:relative;
-    left:50%;
-}
-/* Footer styles */
-#footer {
-    clear:both;
-    float:left;
-    width:100%;
-    border-top:1px solid #000;
-}
-#footer p {
-    padding:10px;
-    margin:0;
+
+.search{
+    margin:0 0 0 40px;
 }
 
 a>button{
     text-decoration: none;
-}
-
-ul.nav{
-    color:#369;
-    margin:0;
-    padding: 0;
-    list-style-type: none;
-}
-
-ul.nav li{
-    padding: 10px;
-    border: 1px black solid;
-    font-weight: bold;
-    background-color: #ccffff
 }
 
 .navigation_number

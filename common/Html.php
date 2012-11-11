@@ -5,7 +5,7 @@ class Html {
     public static function createNavigationLink($viewName, $linkName, $rights) {
         $auth = Authentication::getInstance();
         if ($auth->isUserHaveRights($rights)) {
-            echo "<li><a href=\"index.php?view=$viewName\">$linkName</a></li>";
+            echo "<a href=\"index.php?view=$viewName\"><li class=\"menuItem\">$linkName</li></a>";
         }
     }
 
