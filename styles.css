@@ -1,14 +1,12 @@
-/* <!-- */
-/* General styles */
 body {
     font-family: Verdana, Helvetica, Arial, sans-serif;
     margin:0;
     padding:0;
-    border:0;			/* This removes the border around the viewport in old versions of IE */
+    border:0;		
     width:100%;
     background:#fff;
-    min-width:600px;    /* Minimum width of layout - remove line if not required */
-    /* The min-width property does not work in old versions of Internet Explorer */
+    min-width:600px;    
+    
     font-size:90%;
 }
 a {
@@ -52,7 +50,7 @@ img {
 #content{
 	margin: 0px 210px 0px 210px;
 	background-color:#fff;
-        height:500px;
+        height:450px;
         overflow: auto;
 
 }
@@ -68,7 +66,8 @@ img {
 ul.nav
 {
 	list-style-type:none;
-        margin: 0px;
+        margin: 0;
+        margin-bottom: 15px;
 }
 li.menuItem
 {

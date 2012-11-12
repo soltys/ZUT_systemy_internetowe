@@ -52,7 +52,7 @@ if (isset($_GET['action'])) {
             displayForm($errorCollector->getErrorModel());
         } else {
             $firstName = getPostData("firstName");
-            $lastName = getPostData("firstName");
+            $lastName = getPostData("lastName");
             $rights = 0;
 
             $user = new User($login, $password, $rights, $firstName, $lastName);

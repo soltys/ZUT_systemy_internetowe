@@ -33,6 +33,10 @@ $auth = Authentication::getInstance();
                     Html::createNavigationLink("database", "Baza danych", 1);
                     Html::createNavigationLink("editPerson", "Edytuj dane pracownika", 2);
                     Html::createNavigationLink("deletePerson", "Usuń pracownika", 3);
+                    ?>
+                    </ul>
+                    <ul class="nav">
+                    <?php
                     Html::createNavigationLink("userInfo", "Zmień dane", 1);
                     Html::createNavigationLink("changeUserRights", "Zmień poziom dostępu", 4);
                     Html::createNavigationLink("deleteUser", "Usuń użytkownika", 4);
