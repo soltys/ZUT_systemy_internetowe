@@ -55,7 +55,7 @@ $pageUsers = $paginator->paginate($page);
             <td>
                 <select name="newRights">
                     <?php
-                    for ($i = 1; $i <= 4; $i++) {
+                    for ($i = 0; $i <= 4; $i++) {
                         Html::createSelectedOption($i, $user->getRights());
                     }
                     ?>
