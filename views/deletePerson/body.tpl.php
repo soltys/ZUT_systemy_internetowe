@@ -19,7 +19,7 @@ $page = Paginator::getPage();
 $pagePeople = $paginator->paginate($page);
 ?>
 
-<h2>Usuń użytkownika</h2>
+<h2>Usuń pracownika</h2>
 
 <?php
 if (isset($deletePersonId)) {

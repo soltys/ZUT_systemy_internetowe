@@ -55,8 +55,9 @@ if (isset($_GET['action'])) {
         } else {
             $userId = getPostData("userId");
             $firstName = getPostData("firstName");
-            $lastName = getPostData("firstName");
-
+            $lastName = getPostData("lastName");
+            
+            $oldUser = $auth->getCurrentUser();
             $user = new User($login, $password, $oldUser->getRights(), $firstName, $lastName, $userId);
             $auth->updateUser($user);
             Controller::gotoView("userInfo","action=success");
