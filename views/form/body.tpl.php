@@ -123,7 +123,7 @@ if (isset($_GET['action'])) {
         if ($postalCode == NULL) {
             $errorCollector->addErrorMessage("postalCode", "Nie wprowadzono kodu pocztowego\n");
         }
-        if (!preg_match('|\d{2}-\d{3}|', $postalCode)) {
+        if (!preg_match('/^\d{2}-\d{3}$/', $postalCode)) {
             $errorCollector->addErrorMessage("postalCode", "Kod pocztowy jest niepoprawny\n");
         }
 

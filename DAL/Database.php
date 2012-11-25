@@ -90,7 +90,7 @@ class Database {
     public function addPerson($person) {
         $firstName = $person->getFirstName();
         $lastName = $person->getLastName();
-        $gender = $person->getGender();
+        $gender = $person->getGender(true);
         $maidenName = $person->getMaidenName();
         $email = $person->getEmail();
         $postalCode = $person->getPostalCode();
@@ -237,7 +237,7 @@ VALUES ('$login','$password', $rights,'$firstName', '$lastName')");
      * @param int $newRights
      */
     public function updateRights($userId, $newRights) {
-        $query = "UPDATE " . USER_TABLE . " SET rights=$newRights 
+        $query = "UPDATE " . USER_TABLE . " SET rights=$newRights
                                         WHERE userId=$userId";
 
         $result = mysqli_query($this->mysqli, $query);

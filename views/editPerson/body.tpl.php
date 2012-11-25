@@ -3,117 +3,175 @@ require_once dirname(dirname(__FILE__)) . '/config.php';
 require_once ABSPATH . 'DAL/Database.php';
 require_once ABSPATH . 'model/Person.php';
 require_once ABSPATH . 'common/Paginator.php';
+require_once ABSPATH . 'klogger/klogger.php';
+require_once ABSPATH . "common/ErrorCollector.php";
 
-$errorCount = 0;
-$log = KLogger::instance(LOGPATH . 'editPerson', KLOGGER_ERROR_LEVEL);
-function getPostData($name) {
-    $log = KLogger::instance(ABSPATH . 'logs/editPerson', KLOGGER_ERROR_LEVEL);
-    global $errorCount;
-    if (isset($_POST[$name])) {
-        if (empty($_POST[$name])) {
-            $log->logNotice("$name is empty");
-            $errorCount++;
-        }
-        return $_POST[$name];
-    } else {
-        $log->logNotice("$name is not set");
-        $errorCount++;
-        return NULL;
-    }
-}
-
-global $errorCount;
-if (isset($_GET['personId'])) {
-    $editPersonId = $_GET['personId'];
-}
-if (isset($_GET['confirm'])) {
-    $confirmUpdate = true;
-}
 
 $db = new Database();
 $people = $db->getPeople();
 $paginator = new Paginator($people);
 $page = Paginator::getPage();
 $pagePeople = $paginator->paginate($page);
+
+function getPostData($name) {
+    if (isset($_POST[$name])) {
+        if (empty($_POST[$name])) {
+            return NULL;
+        }
+        return $_POST[$name];
+    } else {
+        return NULL;
+    }
+}
+
+if (isset($_GET['personId'])) {
+    $editPersonId = $_GET['personId'];
+}
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'updatePerson') {
+$confirmUpdate = true;
+    }
+}
+/**
+ *
+ * @param Person $person
+ * @param ErrorCollector $modelErrors
+ */
+function displayForm($person =null, $modelErrors = array()) {
+
+    function getErrorMessage($modelErrors, $key) {
+        if (isset($modelErrors[$key])) {
+            $messages = explode("\n", $modelErrors[$key]);
+            foreach ($messages as $message) {
+                print "<p class=\"errorMessage\">$message</p>";
+            }
+        } else {
+            return "";
+        }
+    }
+
+    $firstName = $person->getFirstName();
+    $lastName = $person->getLastName();
+    $gender = $person->getGender(true);
+    $maidenName = $person->getMaidenName();
+    $email = $person->getEmail();
+    $postalCode = $person->getPostalCode();
+    echo $gender;
+    ?>
+<form method="post" action="index.php?view=editPerson&personId=<?php echo $person->getPersonId(); ?>&action=updatePerson">
+        <table border="0">
+            <tbody>
+                <tr>
+                    <td><label >Imię</label></td>
+                    <td><input   type="text" name="firstName" <?php echo 'value="'.$firstName.'"'; ?>/></td>
+                    <td><?php getErrorMessage($modelErrors, "firstName") ?></td>
+                </tr>
+                <tr>
+                    <td><label >Nazwisko</label></td>
+                    <td><input  type="text" name="lastName" <?php echo 'value="'.$lastName.'"'; ?>/></td>
+                    <td><?php getErrorMessage($modelErrors, "lastName") ?></td>
+                </tr>
+                <tr>
+                    <td>Płeć </td>
+                    <td><input  type="radio" name="gender" value="women" <?php if($gender=="women") echo ' checked="checked" ';?>/><label>Kobieta</label></td>
+                    <td><?php getErrorMessage($modelErrors, "gender") ?></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input   type="radio" name="gender" value="men" <?php if($gender=="men") echo ' checked="checked" ';?>/><label>Mężczyzna</label></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> <label>Nazwisko panieńskie</label></td>
+                    <td><input  type="text" name="maidenName" <?php echo 'value="'.$maidenName.'"'; ?>/></td>
+                    <td><?php getErrorMessage($modelErrors, "maidenName") ?></td>
+                </tr>
+                <tr>
+                    <td><label>Email</label></td>
+                    <td><input  type="text" name="email" <?php echo 'value="'.$email.'"'; ?>/></td>
+                    <td><?php getErrorMessage($modelErrors, "email") ?></td>
+                </tr>
+                <tr>
+                    <td><label>Kod pocztowy</label></td>
+                    <td><input  type="text" name="postalCode" <?php echo 'value="'.$postalCode.'"'; ?>/></td>
+                    <td><?php getErrorMessage($modelErrors, "postalCode") ?></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Dodaj nowego pracownika"/></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <?php
+}
+
+
+
 ?>
 
 <h2>Edytuj pracownika</h2>
 <?php
 if (isset($editPersonId)) {
     if (isset($confirmUpdate)) {
+        $errorCollector = new ErrorCollector("editPerson");
         $firstName = getPostData("firstName");
+        if ($firstName == NULL) {
+            $errorCollector->addErrorMessage("firstName", "Nie wprowadzono imienia\n");
+        }
+
         $lastName = getPostData("lastName");
+        if ($lastName == NULL) {
+            $errorCollector->addErrorMessage("lastName", "Nie wprowadzono nazwiska\n");
+        }
+
         $gender = getPostData("gender");
+        if ($gender == NULL) {
+            $errorCollector->addErrorMessage("gender", "Nie wprowadzono płci\n");
+        }
+
         $maidenName = getPostData("maidenName");
+        if ($maidenName == NULL) {
+            $errorCollector->addErrorMessage("maidenName", "Nie wprowadzono nazwiska panieńskiego\n");
+        }
+
         $email = getPostData("email");
-        $postalCode = getPostData("postalCode");
+        if ($email == NULL) {
+            $errorCollector->addErrorMessage("email", "Nie wprowadzono adresu email\n");
+        }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $log->logNotice("Email: $email is invalid");
-            $errorCount++;
+            $errorCollector->addErrorMessage("email", "Email jest niepoprawny\n");
         }
-        if (!preg_match('|\d{2}-\d{3}|', $postalCode)) {
-            $log->logNotice("Postal code: $postalCode is invalid");
-            $errorCount++;
+
+        $postalCode = getPostData("postalCode");
+        if ($postalCode == NULL) {
+            $errorCollector->addErrorMessage("postalCode", "Nie wprowadzono kodu pocztowego\n");
         }
-        if ($errorCount > 0) {
-            print"<p>Liczba błędów w formularzu: $errorCount </p>";
+        if (!preg_match('/^\d{2}-\d{3}$/', $postalCode)) {
+            $errorCollector->addErrorMessage("postalCode", "Kod pocztowy jest niepoprawny\n");
+        }
+
+        if (count($errorCollector->getErrorModel()) > 0) {
+            $person = $db->getPerson($editPersonId);
+            displayForm($person, $errorCollector->getErrorModel());
         } else {
-            $person = new Person($firstName, $lastName, $gender, $maidenName, $email, $postalCode, $editPersonId);
-            $db->updatePerson($person);            
-            Controller::gotoView("database");
+            $firstName = getPostData("firstName");
+            $lastName = getPostData("lastName");
+            $gender = getPostData("gender");
+            $maidenName = getPostData("maidenName");
+            $email = getPostData("email");
+            $postalCode = getPostData("postalCode");
+            $person = new Person($firstName, $lastName, $gender, $maidenName, $email, $postalCode,$editPersonId);
+            $database = new Database();
+            $database->updatePerson($person);
+            Controller::gotoView("editPerson");
         }
-    } else {
+    }
+    else
+    {
         $person = $db->getPerson($editPersonId);
-        ?>
-        <form method="post" action="<?php print "index.php?view=editPerson&personId=$editPersonId&confirm=yes" ?>">
-            <table border="0">
-                <tbody>
-                    <tr>
-                        <td><label >Imię</label></td>
-                        <td><input  type="text" name="firstName" <?php print "value=\"{$person->getFirstName()}\""; ?>/></td>
-                    </tr>
-                    <tr>
-                        <td><label >Nazwisko</label></td>
-                        <td><input  type="text" name="lastName"  <?php print "value=\"{$person->getLastName()}\""; ?>/></td>
-                    </tr>
-                    <tr>
-                        <td>Płeć</td>
-                        <td><input  type="radio" name="gender" value="women"
-                            <?php
-                            if ($person->getGender(true) == "woman") {
-                                print " checked=\"checked\"";
-                            }
-                            ?> /> <label>Kobieta</label></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input   type="radio" name="gender" value="men"
-                            <?php
-                            if ($person->getGender(true) == "men") {
-                                print " checked=\"checked\"";
-                            }
-                            ?> /><label>Mężczyzna</label></td>
-                    </tr>
-                    <tr>
-                        <td> <label>Nazwisko panieńskie</label></td>
-                        <td><input  type="text" name="maidenName"  <?php print "value=\"{$person->getMaidenName()}\""; ?> /></td>
-                    </tr>
-                    <tr>
-                        <td><label>Email</label></td>
-                        <td><input  type="text" name="email"  <?php print "value=\"{$person->getEmail()}\""; ?>/></td>
-                    </tr>
-                    <tr>
-                        <td><label>Kod pocztowy</label></td>
-                        <td><input  type="text" name="postalCode"  <?php print "value=\"{$person->getPostalCode()}\""; ?>/></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Potwierdź zmiany"/></td>
-                        <td><a href="index.php?view=database"><button type="button">Odrzuć zmiany</button></a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-        <?php
+        displayForm($person);
     }
 } else {
     ?>

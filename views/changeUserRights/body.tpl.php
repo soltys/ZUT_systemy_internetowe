@@ -51,24 +51,28 @@ $pageUsers = $paginator->paginate($page);
             <td><?php print $user->getLogin(); ?></td>
             <td><?php print $user->getFirstName(); ?></td>
             <td><?php print $user->getLastName(); ?></td>
-            <form action="index.php?view=changeUserRights&action=updateRights" method="POST">
+        <form action="index.php?view=changeUserRights&action=updateRights" method="POST">
             <td>
                 <select name="newRights">
                     <?php
-                    for ($i = 1; $i <= 4; $i++) {
-                        Html::createSelectedOption($i, $user->getRights());
+                    if ($user->getRights() == 4) {
+                        echo '<option>4</option>';
+                    } else {
+                        for ($i = 1; $i <= 4; $i++) {
+                            Html::createSelectedOption($i, $user->getRights());
+                        }
                     }
                     ?>
                 </select>
 
             </td>
-            <input type="hidden" name="userId" value="<?php echo $userId;?>"/>
+            <input type="hidden" name="userId" value="<?php echo $userId; ?>"/>
             <td><input type="submit" value="Potwierdź"/></td>
-            </form>
-        </tr>
-        <?php
-    }
-    ?>
+        </form>
+    </tr>
+    <?php
+}
+?>
 </table>
 
 <p>
