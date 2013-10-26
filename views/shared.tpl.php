@@ -72,7 +72,7 @@ $auth = Authentication::getInstance();
             </div>
 
             <div id="footer">
-                <p>Paweł 'sołtys' Sołtysiak I1-32</p>
+                <p>Paweł 'sołtys' Sołtysiak</p>
                 <?php
                 $sessionManager = SessionManager::getInstance();
                 $peopleCount = $sessionManager->getPeopleCount();
